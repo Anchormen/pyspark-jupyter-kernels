@@ -18,18 +18,24 @@ The script supports ```local``` and ```yarn``` spark deployments, but can be eas
   -  ```--spark.*```: (optional) any spark configuration parameter that can be provided to spark via ```PYSPARK_SUBMIT_ARGS```
         -  ex. ```spark.driver.memory 3g``` and/or ```spark.executor.memory 4g``` , ...etc.
 
-#### Notes
-- This script assumes anaconda is available to the user via ```conda```
-- This script will additionally install jupyter and pyhocon libraries to the drivers virtual envionment. 
-    - pyhocon is used to generate the kernel.json file
-    - jupyter is used to run the notebook (via ipython kernel)
- - ```pyspark_kernel.template``` and ```pyspark_kernels.sh``` are kept very generic. However, in typical scenarios  ```--kernels_template_path```, ```--kernels_dir_path```, ```--spark_home```, ```--spark_master``` can be hardcoded based on the cluster being utilized. In that case the only inputs required by the user are ```--kernel_name```, ```--venv_dir_path``` and ```--spark.*```
-
 #### Example Usage 
 ```sh
 $ pyspark_kernel.sh -t /usr/share/kernels_templates/pyspark_kernel.template -d /home/${USER}/.local/share/jupyter/kernels -k pyspark-pandas-yarn -e /home/${USER}/pandas-3.5 --spark_home /opt/spark --spark_master yarn --spark.executor.memory 4g --spark.executor.cores 4 --spark.driver.memory 2g
 ```
 In the example above, the ```pyspark_kernel.sh``` expects to find the ```pyspark_kernel.template``` in the path given by ```-t```, and it will create the generated kernel file ```kernel.json``` in ```/home/${USER}/.local/share/jupyter/kernels/pyspark-pandas-yarn/kernel.json```. Since this path is local to the user, this kernel is not expected to be shared with other users (i.e. not expected to appear at other users Jupyter Noteboook Servers. The virtual environment in ```/home/${USER}/pandas-3.5``` is used by the driver, and will be zipped and distributed to the executors, when the user starts the kernel from his Jupyter Notebook Server. The archive is generated only one time, when the script is run, and wlil be persisted in ```/home/${USER}/.local/share/jupyter/kernels/pyspark-pandas-yarn/pyspark_venv_pyspark-pandas-yarn.zip```. Finally, all the spark inputs provided will be used to initilalize the SparkContext.
+
+#### Notes
+- The script assumes virtual environments are created via anaconda.
+- For yarn-mode, conda virtual environments and packages **must** be created/installed using ```--copy```. This will eleimnate any hard/soft linking of packages in the virtual environment, and is essential for the executors to get a complete copy of the virtual environmnet (otherwise, broken references will exist) 
+- This script assumes anaconda's binaries are available to the user (ex. $PATH)
+- This script uses pip/conda for the installation of pyhocon/jupyter in the drivers virtual environment respectively. 
+    - pyhocon is used to generate the kernel.json file
+    - jupyter is used to run the notebook (via ipython kernel)
+ - ```pyspark_kernel.template``` and ```pyspark_kernels.sh``` are kept very generic. However, in typical scenarios  ```--kernels_template_path```, ```--kernels_dir_path```, ```--spark_home```, ```--spark_master``` can be hardcoded based on the cluster being utilized. In that case the only inputs required by the user are ```--kernel_name```, ```--venv_dir_path``` and ```--spark.*```
+
+
+
+
 
 #### Enterprise Useage & Development
 The generated kernels seamlessly integrate with ```jupyterhub```. It is only required to have Jupyter's configuration aware of the user's local and shared Jupyter data directories (in which the kernels specification files live). [Jupyter have defaults to its data directories], that can be viewed using the command ```jupyter --paths```. It is also possible to add your own paths by exporting ```JUPYTER_PATH``` environment variable. [More details!]
