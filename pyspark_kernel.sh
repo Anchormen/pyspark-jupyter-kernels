@@ -25,7 +25,7 @@
 # --spark.*: any spark configuration parameter that can be provided to spark via PYSPARK_SUBMIT_ARGS
 #           - ex. spark.driver.memory 3g and/or spark.executor.memory 4g , ...etc.
 #
-ORK_DIR=$(pwd)
+WORK_DIR=$(pwd)
 echo WORKDIR = ${WORK_DIR}
 
 PYSPARK_SUBMIT_ARGS=
