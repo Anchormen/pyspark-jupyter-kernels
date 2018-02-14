@@ -126,7 +126,7 @@ if [ "${SPARK_MASTER}" = 'yarn' ]; then
     # adding --archives spark configuration and considering referencing the "extracted"
     # virtual environment from the executors working/staging directory
     STAGING_TAG=PYSPARK_VENV
-    PYSPARK_SUBMIT_ARGS=${PYSPARK_SUBMIT_ARGS} --archives ${VENV_ZIP}"#${STAGING_TAG}"
+    PYSPARK_SUBMIT_ARGS="${PYSPARK_SUBMIT_ARGS} --archives ${VENV_ZIP}#${STAGING_TAG}"
     PYSPARK_PYTHON=./${STAGING_TAG}/bin/python
 fi
 
