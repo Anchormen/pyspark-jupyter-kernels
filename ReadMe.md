@@ -50,7 +50,7 @@ License
 ----
 APACHE 2.0
 
-[here]: <http://todo-link-to-blog-post>
+[here]: <https://anchormen.nl/blog/big-data-services/pyspark-jupyter-kernels/>
 [Jupyter Kernel Specification]: <http://jupyter-client.readthedocs.io/en/stable/kernels.html>
 [Pyhocon]: <https://github.com/chimpler/pyhocon>
 [hocon]: <https://github.com/lightbend/config/blob/master/HOCON.md>
